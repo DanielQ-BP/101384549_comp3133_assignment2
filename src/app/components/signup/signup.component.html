@@ -1,0 +1,88 @@
+<div class="auth-page">
+  <div class="auth-left">
+    <div class="auth-left-content">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="brand-name">EmpTrack</span>
+      </div>
+      <div class="hero-text">
+        <h1>Join the<br>modern<br><span class="accent-word">workforce.</span></h1>
+        <p>Create your account and start managing your team in minutes.</p>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-info"><span class="step-title">Create your account</span><span class="step-desc">Sign up with username and email</span></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-info"><span class="step-title">Add your employees</span><span class="step-desc">Build and manage your team directory</span></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-info"><span class="step-title">Stay organized</span><span class="step-desc">Search, filter and track with ease</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-right">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h2>Create account</h2>
+        <p>Fill in your details to get started</p>
+      </div>
+
+      <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="auth-form" novalidate>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Username</mat-label>
+          <mat-icon matPrefix class="field-icon">person_outline</mat-icon>
+          <input matInput formControlName="username" placeholder="e.g. john_doe" autocomplete="username" />
+          <mat-error *ngIf="hasError('username','required')">Username is required</mat-error>
+          <mat-error *ngIf="hasError('username','minlength')">Minimum 3 characters required</mat-error>
+          <mat-error *ngIf="hasError('username','pattern')">Only letters, numbers and underscores allowed</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email Address</mat-label>
+          <mat-icon matPrefix class="field-icon">email</mat-icon>
+          <input matInput formControlName="email" type="email" placeholder="your@email.com" autocomplete="email" />
+          <mat-error *ngIf="hasError('email','required')">Email is required</mat-error>
+          <mat-error *ngIf="hasError('email','email')">Please enter a valid email address</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <mat-icon matPrefix class="field-icon">lock_outline</mat-icon>
+          <input matInput [type]="hidePassword ? 'password' : 'text'"
+            formControlName="password" placeholder="Min. 6 characters" autocomplete="new-password" />
+          <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="hasError('password','required')">Password is required</mat-error>
+          <mat-error *ngIf="hasError('password','minlength')">Password must be at least 6 characters</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Confirm Password</mat-label>
+          <mat-icon matPrefix class="field-icon">lock_outline</mat-icon>
+          <input matInput [type]="hideConfirm ? 'password' : 'text'"
+            formControlName="confirmPassword" placeholder="Repeat your password" autocomplete="new-password" />
+          <button mat-icon-button matSuffix type="button" (click)="hideConfirm = !hideConfirm">
+            <mat-icon>{{ hideConfirm ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="hasError('confirmPassword','required')">Please confirm your password</mat-error>
+          <mat-error *ngIf="hasError('confirmPassword','passwordMismatch')">Passwords do not match</mat-error>
+        </mat-form-field>
+
+        <button type="submit" mat-flat-button class="submit-btn" [disabled]="loading">
+          <mat-spinner *ngIf="loading" diameter="18" class="btn-spinner"></mat-spinner>
+          <span>{{ loading ? 'Creating account...' : 'Create Account' }}</span>
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        <p>Already have an account? <a routerLink="/login">Sign in</a></p>
+      </div>
+    </div>
+  </div>
+</div>

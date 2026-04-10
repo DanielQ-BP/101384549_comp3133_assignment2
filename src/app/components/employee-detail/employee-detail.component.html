@@ -1,0 +1,158 @@
+<app-navbar></app-navbar>
+
+<div class="page-container" *ngIf="!loading() && employee() as emp">
+  <!-- Back + Actions -->
+  <div class="page-header">
+    <button mat-icon-button class="back-btn" routerLink="/employees">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span class="breadcrumb">Employee Details</span>
+    <div class="header-actions">
+      <button mat-button class="btn-outline" [routerLink]="['/employees/edit', emp._id]">
+        <mat-icon>edit</mat-icon>
+        Edit
+      </button>
+      <button mat-button class="btn-delete" (click)="deleteEmployee()">
+        <mat-icon>delete_outline</mat-icon>
+        Delete
+      </button>
+    </div>
+  </div>
+
+  <div class="detail-layout">
+    <!-- Profile Card -->
+    <div class="profile-card card">
+      <div class="profile-photo-section">
+        <img *ngIf="emp.employee_photo" [src]="emp.employee_photo" [alt]="emp.first_name" class="profile-photo" />
+        <div *ngIf="!emp.employee_photo" class="profile-avatar-lg">
+          {{ getInitials(emp) }}
+        </div>
+      </div>
+
+      <div class="profile-info">
+        <h2 class="profile-name">{{ emp.first_name }} {{ emp.last_name }}</h2>
+        <p class="profile-designation">{{ emp.designation }}</p>
+
+        <div class="profile-badges">
+          <span class="chip chip-accent">{{ emp.department }}</span>
+          <span class="chip chip-gray">{{ emp.gender }}</span>
+        </div>
+      </div>
+
+      <div class="profile-stats">
+        <div class="stat-item">
+          <span class="stat-icon">
+            <mat-icon>calendar_today</mat-icon>
+          </span>
+          <div class="stat-content">
+            <span class="stat-label">Date of Joining</span>
+            <span class="stat-value">{{ emp.date_of_joining | date: 'MMMM d, y' }}</span>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <span class="stat-icon salary-icon">
+            <mat-icon>payments</mat-icon>
+          </span>
+          <div class="stat-content">
+            <span class="stat-label">Annual Salary</span>
+            <span class="stat-value salary-val">
+              {{ emp.salary | currency: 'CAD' : 'symbol' : '1.0-0' }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Details Card -->
+    <div class="details-card">
+      <div class="detail-section card">
+        <h3 class="section-label">Contact Information</h3>
+        <div class="detail-rows">
+          <div class="detail-row">
+            <div class="detail-label">
+              <mat-icon>email</mat-icon>
+              Email
+            </div>
+            <div class="detail-value">
+              <a [href]="'mailto:' + emp.email">{{ emp.email }}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section card">
+        <h3 class="section-label">Employment Information</h3>
+        <div class="detail-rows">
+          <div class="detail-row">
+            <div class="detail-label">
+              <mat-icon>business</mat-icon>
+              Department
+            </div>
+            <div class="detail-value">{{ emp.department }}</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-label">
+              <mat-icon>work_outline</mat-icon>
+              Designation
+            </div>
+            <div class="detail-value">{{ emp.designation }}</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-label">
+              <mat-icon>person_outline</mat-icon>
+              Gender
+            </div>
+            <div class="detail-value">{{ emp.gender }}</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-label">
+              <mat-icon>event</mat-icon>
+              Joined On
+            </div>
+            <div class="detail-value">{{ emp.date_of_joining | date: 'MMMM d, yyyy' }}</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-label">
+              <mat-icon>payments</mat-icon>
+              Salary
+            </div>
+            <div class="detail-value salary-val">
+              {{ emp.salary | currency: 'CAD' : 'symbol' : '1.0-0' }} / year
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section card" *ngIf="emp.created_at || emp.updated_at">
+        <h3 class="section-label">Record Metadata</h3>
+        <div class="detail-rows">
+          <div class="detail-row" *ngIf="emp.created_at">
+            <div class="detail-label">
+              <mat-icon>add_circle_outline</mat-icon>
+              Created
+            </div>
+            <div class="detail-value meta-val">{{ emp.created_at | date: 'medium' }}</div>
+          </div>
+          <div class="detail-row" *ngIf="emp.updated_at">
+            <div class="detail-label">
+              <mat-icon>update</mat-icon>
+              Last Updated
+            </div>
+            <div class="detail-value meta-val">{{ emp.updated_at | date: 'medium' }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading State -->
+<div class="loading-state" *ngIf="loading()">
+  <mat-spinner diameter="40"></mat-spinner>
+  <span>Loading employee details...</span>
+</div>

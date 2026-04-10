@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongo:
+    image: mongo:7
+    container_name: emp_mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: comp3133_assignment
+    networks:
+      - emp_network
+
+  # Express/GraphQL Backend (Assignment 1)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: emp_backend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongo:27017/comp3133_assignment
+      - JWT_SECRET=your_super_secret_jwt_key_change_in_production
+      - PORT=3000
+    depends_on:
+      - mongo
+    networks:
+      - emp_network
+
+  # Angular Frontend (Assignment 2)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: emp_frontend
+    restart: unless-stopped
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - emp_network
+
+volumes:
+  mongo_data:
+    driver: local
+
+networks:
+  emp_network:
+    driver: bridge

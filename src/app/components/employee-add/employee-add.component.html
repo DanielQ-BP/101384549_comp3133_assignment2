@@ -1,0 +1,130 @@
+<app-navbar></app-navbar>
+
+<div class="page-container">
+  <div class="page-header">
+    <button mat-icon-button class="back-btn" routerLink="/employees"><mat-icon>arrow_back</mat-icon></button>
+    <div>
+      <h1 class="section-title">Add New Employee</h1>
+      <p class="page-subtitle">Fill in the details below to create a new employee record</p>
+    </div>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-layout" novalidate>
+
+    <!-- Sidebar: Photo -->
+    <div class="form-sidebar">
+      <div class="photo-card card">
+        <div class="photo-header">
+          <span>Profile Photo</span>
+          <span class="optional-tag">Optional</span>
+        </div>
+        <div class="photo-upload-area">
+          <div class="photo-preview" *ngIf="photoPreview">
+            <img [src]="photoPreview" alt="Preview" />
+            <button type="button" class="remove-photo" (click)="removePhoto()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+          <div class="photo-placeholder" *ngIf="!photoPreview">
+            <div class="placeholder-icon"><mat-icon>person_outline</mat-icon></div>
+            <p>Upload a profile picture</p>
+            <label class="upload-btn" for="photo-input">
+              <mat-icon>cloud_upload</mat-icon> Choose File
+            </label>
+            <input id="photo-input" type="file" accept="image/*" (change)="onPhotoSelected($event)" style="display:none" />
+          </div>
+        </div>
+        <p class="photo-hint">JPG, PNG or GIF · Max 2MB</p>
+      </div>
+    </div>
+
+    <!-- Main: Fields -->
+    <div class="form-main">
+
+      <div class="form-section card">
+        <h3 class="section-label">Personal Information</h3>
+
+        <div class="field-row">
+          <mat-form-field appearance="outline">
+            <mat-label>First Name *</mat-label>
+            <input matInput formControlName="first_name" placeholder="e.g. John" />
+            <mat-error *ngIf="hasError('first_name','required')">First name is required</mat-error>
+            <mat-error *ngIf="hasError('first_name','minlength')">Minimum 2 characters required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Last Name *</mat-label>
+            <input matInput formControlName="last_name" placeholder="e.g. Doe" />
+            <mat-error *ngIf="hasError('last_name','required')">Last name is required</mat-error>
+            <mat-error *ngIf="hasError('last_name','minlength')">Minimum 2 characters required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email Address *</mat-label>
+          <mat-icon matPrefix>email</mat-icon>
+          <input matInput formControlName="email" type="email" placeholder="john.doe@company.com" />
+          <mat-error *ngIf="hasError('email','required')">Email address is required</mat-error>
+          <mat-error *ngIf="hasError('email','email')">Please enter a valid email address</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Gender *</mat-label>
+          <mat-select formControlName="gender">
+            <mat-option *ngFor="let g of genders" [value]="g">{{ g }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="hasError('gender','required')">Please select a gender</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-section card">
+        <h3 class="section-label">Employment Details</h3>
+
+        <div class="field-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Department *</mat-label>
+            <mat-select formControlName="department">
+              <mat-option *ngFor="let d of departments" [value]="d">{{ d }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="hasError('department','required')">Please select a department</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Designation *</mat-label>
+            <mat-select formControlName="designation">
+              <mat-option *ngFor="let d of designations" [value]="d">{{ d }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="hasError('designation','required')">Please select a designation</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="field-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Salary (CAD) * — min. $1,000</mat-label>
+            <mat-icon matPrefix>attach_money</mat-icon>
+            <input matInput formControlName="salary" type="number" placeholder="e.g. 75000" />
+            <mat-error *ngIf="hasError('salary','required')">Salary is required</mat-error>
+            <mat-error *ngIf="hasError('salary','min')">Salary must be at least $1,000</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Date of Joining *</mat-label>
+            <input matInput formControlName="date_of_joining" [matDatepicker]="picker" placeholder="MM/DD/YYYY" />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="hasError('date_of_joining','required')">Date of joining is required</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" mat-button class="btn-outline" routerLink="/employees">Cancel</button>
+        <button type="submit" mat-flat-button class="btn-primary" [disabled]="loading">
+          <mat-spinner *ngIf="loading" diameter="16"></mat-spinner>
+          <mat-icon *ngIf="!loading">person_add</mat-icon>
+          {{ loading ? 'Adding...' : 'Add Employee' }}
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

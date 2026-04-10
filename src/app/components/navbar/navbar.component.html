@@ -1,0 +1,52 @@
+<nav class="navbar">
+  <div class="navbar-inner">
+    <!-- Logo -->
+    <a routerLink="/employees" class="navbar-brand">
+      <div class="brand-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="brand-name">EmpTrack</span>
+    </a>
+
+    <!-- Nav Links -->
+    <div class="navbar-links">
+      <a routerLink="/employees" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">
+        <mat-icon>people_outline</mat-icon>
+        <span>Employees</span>
+      </a>
+    </div>
+
+    <!-- Right Actions -->
+    <div class="navbar-actions">
+      <button mat-flat-button class="btn-add" (click)="navigateToAdd()">
+        <mat-icon>add</mat-icon>
+        Add Employee
+      </button>
+
+      <!-- User Menu -->
+      <button class="user-avatar" [matMenuTriggerFor]="userMenu" matTooltip="Account">
+        <span class="avatar-initials">{{ userInitials() }}</span>
+      </button>
+
+      <mat-menu #userMenu="matMenu" class="user-menu">
+        <div class="menu-header">
+          <div class="menu-avatar">{{ userInitials() }}</div>
+          <div class="menu-user-info">
+            <span class="menu-username">{{ currentUser()?.username }}</span>
+            <span class="menu-email">{{ currentUser()?.email }}</span>
+          </div>
+        </div>
+        <div class="menu-divider"></div>
+        <button mat-menu-item (click)="logout()" class="logout-item">
+          <mat-icon>logout</mat-icon>
+          <span>Sign out</span>
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+</nav>
