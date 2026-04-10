@@ -29,7 +29,7 @@ export const appConfig: ApplicationConfig = {
         });
 
         const http = httpLink.create({
-          uri: 'http://localhost:4000/graphql',
+          uri: 'https://comp3133assignment1-production.up.railway.app/graphql',
         });
 
         return {
